@@ -84,6 +84,18 @@
             background: #218838;
         }
 
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+            padding: 9px 24px; /* Adjust padding to match solid button with border */
+        }
+
+        .btn-outline:hover {
+            background: var(--primary-color);
+            color: var(--white);
+        }
+
         /* Hero Section */
         .hero {
             background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://source.unsplash.com/1600x900/?business,team');
@@ -213,8 +225,13 @@
                     <a href="#income">Income Plan</a>
                     <a href="#benefits">Benefits</a>
                     <a href="#duties">Duties</a>
-                    <a href="{% url 'signin' %}">Sign In</a>
-                    <a href="{% url 'signup' %}" class="btn">Join Now</a>
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'dashboard' %}">Dashboard</a>
+                        <a href="{% url 'signout' %}" class="btn" style="background: var(--dark-color);">Logout</a>
+                    {% else %}
+                        <a href="{% url 'signin' %}" class="btn btn-outline">Sign In</a>
+                        <a href="{% url 'signup' %}" class="btn">Join Now</a>
+                    {% endif %}
                 </div>
             </nav>
         </div>

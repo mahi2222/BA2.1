@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from .models import BusinessAssociate
 
@@ -44,7 +45,7 @@ def signup(request):
         # Log the user in
         login(request, user)
         
-        return HttpResponse("<h1>Thank you for signing up! We will contact you soon.</h1><a href='/'>Go Home</a>")
+        return redirect('dashboard')
 
     return render(request, 'marketing/signup.html')
 
@@ -57,8 +58,40 @@ def signin(request):
         
         if user is not None:
             login(request, user)
-            return redirect('index')
+            return redirect('dashboard')
         else:
             return render(request, 'marketing/signin.html', {'error': 'Invalid email or password.'})
             
     return render(request, 'marketing/signin.html')
+
+@login_required(login_url='signin')
+def dashboard(request):
+    # Retrieve the Business Associate profile based on the logged-in user's email
+    try:
+        associate = BusinessAssociate.objects.get(email=request.user.email)
+    except BusinessAssociate.DoesNotExist:
+        associate = None
+        
+    return render(request, 'marketing/dashboard.html', {'associate': associate})
+
+@login_required(login_url='signin')
+def edit_profile(request):
+    try:
+        associate = BusinessAssociate.objects.get(email=request.user.email)
+    except BusinessAssociate.DoesNotExist:
+        # Should technically not happen if dashboard works, but handle anyway
+        return redirect('dashboard')
+
+    if request.method == 'POST':
+        associate.phone = request.POST.get('phone')
+        associate.address = request.POST.get('address')
+        associate.pincode = request.POST.get('pincode')
+        associate.country = request.POST.get('country')
+        associate.save()
+        return redirect('dashboard')
+
+    return render(request, 'marketing/edit_profile.html', {'associate': associate})
+
+def signout(request):
+    logout(request)
+    return redirect('index')
