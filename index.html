@@ -229,7 +229,7 @@
                         <a href="{% url 'dashboard' %}">Dashboard</a>
                         <a href="{% url 'signout' %}" class="btn" style="background: var(--white-color);">Logout</a>
                     {% else %}
-                        <a href="{% url 'marketing/templates/marketing/signin.html' %}" class="btn btn-outline">Sign In</a>
+                        <a href="{% url 'signin.html' %}" class="btn btn-outline">Sign In</a>
                         <a href="{% url 'signup' %}" class="btn">Join Now</a>
                     {% endif %}
                 </div>

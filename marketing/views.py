@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from .models import BusinessAssociate
 
 def index(request):
-    return render(request, 'marketing/index.html')
+    return render(request, 'index.html')
 
 def signup(request):
     if request.method == 'POST':
@@ -45,9 +45,9 @@ def signup(request):
         # Log the user in
         login(request, user)
         
-        return redirect('dashboard')
+        return redirect('marketing/templates/marketing/dashboard')
 
-    return render(request, 'marketing/signup.html')
+    return render(request, 'marketing/templates/marketing/signup.html')
 
 def signin(request):
     if request.method == 'POST':
@@ -58,11 +58,11 @@ def signin(request):
         
         if user is not None:
             login(request, user)
-            return redirect('dashboard')
+            return redirect('marketing/templates/marketing/dashboard')
         else:
-            return render(request, 'marketing/signin.html', {'error': 'Invalid email or password.'})
+            return render(request, 'marketing/templates/marketing/signin.html', {'error': 'Invalid email or password.'})
             
-    return render(request, 'marketing/signin.html')
+    return render(request, 'marketing/templates/marketing//signin.html')
 
 @login_required(login_url='signin')
 def dashboard(request):
@@ -72,7 +72,7 @@ def dashboard(request):
     except BusinessAssociate.DoesNotExist:
         associate = None
         
-    return render(request, 'marketing/dashboard.html', {'associate': associate})
+    return render(request, 'marketing/templates/marketing/dashboard.html', {'associate': associate})
 
 @login_required(login_url='signin')
 def edit_profile(request):
@@ -88,9 +88,9 @@ def edit_profile(request):
         associate.pincode = request.POST.get('pincode')
         associate.country = request.POST.get('country')
         associate.save()
-        return redirect('dashboard')
+        return redirect('marketing/templates/marketing/dashboard')
 
-    return render(request, 'marketing/edit_profile.html', {'associate': associate})
+    return render(request, 'marketing/templates/marketing/edit_profile.html', {'associate': associate})
 
 def signout(request):
     logout(request)
