@@ -227,7 +227,7 @@
                     <a href="#duties">Duties</a>
                     {% if user.is_authenticated %}
                         <a href="{% url 'dashboard' %}">Dashboard</a>
-                        <a href="{% url 'signout' %}" class="btn" style="background: var(--dark-color);">Logout</a>
+                        <a href="{% url 'signout' %}" class="btn" style="background: var(--white-color);">Logout</a>
                     {% else %}
                         <a href="{% url 'signin' %}" class="btn btn-outline">Sign In</a>
                         <a href="{% url 'signup' %}" class="btn">Join Now</a>
